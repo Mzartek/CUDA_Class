@@ -10,6 +10,14 @@ endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}/CMakeModules")
 
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  add_definitions(-std=c++14 -Wall)
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_definitions(-std=c++14 -Wall)
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+  add_definitions(/W4)
+endif()
+
 set(src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(sources
