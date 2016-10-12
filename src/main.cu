@@ -114,19 +114,26 @@ int main(void)
 {
   GrayLevel<100, 100> grayLevel;
 
-  CPUDoIt(grayLevel.GetPtr(), grayLevel.GetWidth(), grayLevel.GetHeight());
-  grayLevel.SaveToFile("output_CPU.txt");
+  // CPU style
+  {
+    CPUDoIt(grayLevel.GetPtr(), grayLevel.GetWidth(), grayLevel.GetHeight());
+    grayLevel.SaveToFile("output_CPU.txt");
+  }
 
-  unsigned int* ptr;
-  size_t ptrSize = grayLevel.GetWidth() * grayLevel.GetHeight() * sizeof(decltype(ptr));
-  HANDLE_ERROR(cudaMalloc(&ptr, ptrSize));
+  // GPU stye
+  {
+    unsigned int* ptr;
+    size_t ptrSize = grayLevel.GetWidth() * grayLevel.GetHeight() * sizeof(decltype(ptr));
+    HANDLE_ERROR(cudaMalloc(&ptr, ptrSize));
 
-  unsigned int blockSize = 1;
-  unsigned int threadSize = grayLevel.GetWidth() * grayLevel.GetHeight();
-  GPUDoIt<<<blockSize, threadSize>>> (ptr, grayLevel.GetWidth(), grayLevel.GetHeight());
+    unsigned int blockSize = 1;
+    unsigned int threadSize = grayLevel.GetWidth() * grayLevel.GetHeight();
+    GPUDoIt<<<blockSize, threadSize>>>(ptr, grayLevel.GetWidth(), grayLevel.GetHeight());
 
-  HANDLE_ERROR(cudaMemcpy(grayLevel.GetPtr(), ptr, ptrSize, cudaMemcpyDeviceToHost));
-  HANDLE_ERROR(cudaFree(ptr));
+    HANDLE_ERROR(cudaMemcpy(grayLevel.GetPtr(), ptr, ptrSize, cudaMemcpyDeviceToHost));
+    HANDLE_ERROR(cudaFree(ptr));
+    grayLevel.SaveToFile("output_GPU.txt");
+  }
 
   return 0;
 }
