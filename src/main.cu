@@ -97,7 +97,7 @@ public:
 
   void SaveToFile(const std::string& filename)
   {
-    std::ofstream output(filename);
+    std::ofstream output(filename.c_str());
     for (int i = 0; i < Width; ++i)
     {
       for (int j = 0; j < Height; ++j)
