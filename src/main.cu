@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <array>
 
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
@@ -85,7 +84,7 @@ __global__ void GPUDoIt(unsigned int* ptr, int width, int height)
 template <int Width, int Height>
 class GrayLevel
 {
-  std::array<unsigned int, Width * Height> _array;
+  unsigned int _array[Width * Height];
  
 public:
   int GetWidth() { return Width; }
