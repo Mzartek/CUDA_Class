@@ -122,7 +122,7 @@ int main(void)
   // GPU stye
   {
     unsigned int* ptr;
-    size_t ptrSize = grayLevel.GetWidth() * grayLevel.GetHeight() * sizeof(decltype(ptr));
+    size_t ptrSize = grayLevel.GetWidth() * grayLevel.GetHeight() * sizeof(unsigned int);
     HANDLE_ERROR(cudaMalloc(&ptr, ptrSize));
 
     unsigned int blockSize = 1;
