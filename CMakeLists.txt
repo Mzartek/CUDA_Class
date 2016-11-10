@@ -21,6 +21,9 @@ endif()
 set(src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(sources
+    ${src_dir}/Helpers.h
+    ${src_dir}/Particle.h
+    ${src_dir}/Vec.h
     ${src_dir}/main.cu)
 
 cuda_add_executable(CUDA_Class ${sources})
