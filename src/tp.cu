@@ -1,6 +1,7 @@
 #include "Helpers.h"
 
 #include <vector>
+#include <string>
 #include <iostream>
 
 __host__ void printResults(const std::vector<unsigned int>& results)
@@ -29,10 +30,10 @@ __host__ void syracuseCPU_execute(unsigned int* dst, size_t size)
   }
 }
 
-__global__ void syracuseGPU_execute(unsigned int* dst)
+__global__ void syracuseGPU_execute(unsigned int* dst, size_t size)
 {
   int index = blockIdx.x * blockDim.x + threadIdx.x;
-  dst[index] = calculate(index + 1);
+  if (index < size) dst[index] = calculate(index + 1);
 }
 
 __host__ void syracuseCPU_prepare(size_t size)
@@ -52,9 +53,12 @@ __host__ void syracuseGPU_prepare(size_t size)
 
   HANDLE_ERROR(cudaMalloc(&dstGPU, byteSize));
 
-  unsigned int blockSize = 1;
-  unsigned int threadSize = static_cast<unsigned int>(size);
-  syracuseGPU_execute<<<blockSize, threadSize>>>(dstGPU);
+  CUDAConfig cudaConfig(size);
+  unsigned int gridSize = cudaConfig.GetGridSize();
+  unsigned int blockSize = cudaConfig.GetBlockSize();
+  std::cout << "Grid Size: " << gridSize << std::endl;
+  std::cout << "Block Size: " << blockSize << std::endl;
+  syracuseGPU_execute<<<gridSize, blockSize>>>(dstGPU, size);
 
   HANDLE_ERROR(cudaMemcpy(&dstCPU[0], dstGPU, byteSize, cudaMemcpyDeviceToHost));
   HANDLE_ERROR(cudaFree(dstGPU));
