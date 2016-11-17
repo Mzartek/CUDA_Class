@@ -32,7 +32,7 @@ __host__ void syracuseCPU_execute(unsigned int* dst, size_t size)
 __global__ void syracuseGPU_execute(unsigned int* dst)
 {
   int index = blockIdx.x * blockDim.x + threadIdx.x;
-  dst[index] = index + 1;
+  dst[index] = calculate(index + 1);
 }
 
 __host__ void syracuseCPU_prepare(size_t size)

@@ -3,4 +3,4 @@
 
 int main_tp(int argc, char **argv);
 
-#endif TP_HEADER
+#endif
