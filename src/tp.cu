@@ -13,11 +13,11 @@ __host__ void printResults(const std::vector<unsigned int>& results)
 
 __host__ __device__ unsigned int calculate(int x)
 {
-  int n;
+  int a, n;
   for (n = 0; x > 1; ++n)
   {
-    if (x & 1) x = 3 * x + 1;
-    else x = x / 2;
+    a = x & 1;
+    x = a * (3 * x + 1) + (a == 0 ? 1 : 0) * (x / 2);
   }
   return n;
 }
