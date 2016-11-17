@@ -1,7 +1,8 @@
 #ifndef HELPERS_HEADER
 #define HELPERS_HEADER
 
-#include <iostream>
+#include <cstdio>
+#include <cstdlib>
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
 
