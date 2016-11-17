@@ -24,6 +24,9 @@ set(sources
     ${src_dir}/Helpers.h
     ${src_dir}/Particle.h
     ${src_dir}/Vec.h
-    ${src_dir}/main.cu)
+    ${src_dir}/main.cu
+    ${src_dir}/tp.h
+    ${src_dir}/tp.cu)
 
+set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-Wno-deprecated-gpu-targets)
 cuda_add_executable(CUDA_Class ${sources})

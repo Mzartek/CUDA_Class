@@ -1,64 +1,6 @@
 #include <fstream>
 
-#include <device_launch_parameters.h>
-
-
-struct Complexe
-{
-  float _r;
-  float _i;
-
-  __host__ __device__ float GetMagnetudeSquare()
-  {
-    return _i * _i + _r * _r;
-  }
-};
-
-__host__ __device__ Complexe operator*(Complexe lhs, const Complexe& rhs)
-{
-  Complexe res;
-  res._r = lhs._r * rhs._r - lhs._i * rhs._i;
-  res._i = lhs._i * rhs._r + lhs._r * rhs._i;
-  return res;
-}
-
-__host__ __device__ Complexe operator+(Complexe lhs, const Complexe& rhs)
-{
-  Complexe res;
-  res._r = lhs._r + rhs._r;
-  res._i = lhs._i + rhs._i;
-  return res;
-}
-
-__host__ __device__ unsigned int ComputePixel(Complexe Z)
-{
-  const Complexe C = { -0.8f, 0.156f };
-  Complexe A;
-
-  for (int i = 0; i < 200; ++i)
-  {
-    A = Z * Z;
-    Z = A + C;
-    if (Z.GetMagnetudeSquare() > 1000)
-      return 0;
-  }
-  return 1;
-}
-
-__host__ void CPUDoIt(unsigned int* ptr, int width, int height)
-{
-  Complexe tmp;
-  for (int i = 0; i < width; ++i)
-  {
-    for (int j = 0; j < height; ++j)
-    {
-      tmp._r = ((float)i / width) * 2 - 1;
-      tmp._i = ((float)j / height) * 2 - 1;
-      ptr[j * width + i] = ComputePixel(tmp);
-    }
-  }
-}
-
+/*
 __global__ void GPUDoIt(unsigned int* ptr, int width, int height)
 {
   Complexe tmp;
@@ -99,10 +41,12 @@ public:
     }
   }
 };
+*/
 
-int main(void)
+#include "tp.h"
+int main(int argc, char **argv)
 {
-  GrayLevel<100, 100> grayLevel;
+  /*GrayLevel<100, 100> grayLevel;
 
   // CPU style
   {
@@ -124,6 +68,7 @@ int main(void)
     HANDLE_ERROR(cudaFree(ptr));
     grayLevel.SaveToFile("output_GPU.txt");
   }
+  */
 
-  return 0;
+  return main_tp(argc, argv);
 }

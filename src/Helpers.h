@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cuda_runtime.h>
+#include <device_launch_parameters.h>
 
 static void HandleError(cudaError_t err, const char *file, int line) {
   if (err != cudaSuccess) {
