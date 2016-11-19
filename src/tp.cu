@@ -1,7 +1,6 @@
 #include "Helpers.h"
 
 #include <vector>
-#include <string>
 #include <iostream>
 
 __host__ void printResults(const std::vector<unsigned int>& results)

@@ -10,13 +10,7 @@ endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}/CMakeModules")
 
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-  add_compile_options(-Wall)
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall)
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-  add_compile_options(/W4)
-endif()
+set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-Wno-deprecated-gpu-targets)
 
 set(src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
@@ -28,5 +22,4 @@ set(sources
     ${src_dir}/tp.h
     ${src_dir}/tp.cu)
 
-set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-Wno-deprecated-gpu-targets)
 cuda_add_executable(CUDA_Class ${sources})

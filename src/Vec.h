@@ -43,6 +43,6 @@ struct Vec3
     lhs -= rhs;
     return rhs;
   }
-}
+};
 
 #endif
