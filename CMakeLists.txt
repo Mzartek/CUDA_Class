@@ -20,6 +20,8 @@ set(sources
     ${src_dir}/Vec.h
     ${src_dir}/main.cu
     ${src_dir}/tp.h
-    ${src_dir}/tp.cu)
+    ${src_dir}/tp.cu
+    ${src_dir}/tp2.h
+    ${src_dir}/tp2.cu)
 
 cuda_add_executable(CUDA_Class ${sources})
