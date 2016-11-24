@@ -1,14 +1,6 @@
 #include "Helpers.h"
 
 #include <vector>
-#include <iostream>
-
-__host__ void printResults(const std::vector<unsigned int>& results)
-{
-  for (std::vector<unsigned int>::const_iterator it = results.begin(); it != results.end(); ++it)
-    std::cout << *it << " ";
-  std::cout << std::endl;
-}
 
 __host__ __device__ unsigned int calculate(int x)
 {
@@ -23,7 +15,7 @@ __host__ __device__ unsigned int calculate(int x)
 
 __host__ void syracuseCPU_execute(unsigned int* dst, size_t size)
 {
-  for (int i = 0; i < size; ++i)
+  for (size_t i = 0; i < size; ++i)
   {
     dst[i] = calculate(i + 1);
   }
@@ -41,7 +33,7 @@ __host__ void syracuseCPU_prepare(size_t size)
 
   syracuseCPU_execute(&dst[0], size);
 
-  printResults(dst);
+  PrintResults<std::vector<unsigned int>>(dst, "output_CPU.txt");
 }
 
 __host__ void syracuseGPU_prepare(size_t size)
@@ -62,14 +54,14 @@ __host__ void syracuseGPU_prepare(size_t size)
   HANDLE_ERROR(cudaMemcpy(&dstCPU[0], dstGPU, byteSize, cudaMemcpyDeviceToHost));
   HANDLE_ERROR(cudaFree(dstGPU));
 
-  printResults(dstCPU);
+  PrintResults<std::vector<unsigned int>>(dstCPU, "output_GPU.txt");
 }
 
 int main_tp(int argc, char **argv)
 {
   if (argc != 2)
   {
-    std::cout << "program [size]" << std::endl;
+    std::cerr << "program [size]" << std::endl;
     return 1;
   }
 

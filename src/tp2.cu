@@ -1,14 +1,6 @@
 #include "Helpers.h"
 
 #include <vector>
-#include <iostream>
-
-__host__ void printResults(const std::vector<int>& results)
-{
-  for (std::vector<int>::const_iterator it = results.begin(); it != results.end(); ++it)
-    std::cout << *it << " ";
-  std::cout << std::endl;
-}
 
 __host__ __device__ void sortElement(size_t element, const int* src, int* dst, size_t size)
 {
@@ -63,8 +55,6 @@ __host__ void sortGPU_prepare(const std::vector<int>& srcCPU, std::vector<int>& 
 
   HANDLE_ERROR(cudaFree(dstGPU));
   HANDLE_ERROR(cudaFree(srcGPU));
-
-  printResults(dstCPU);
 }
 
 std::vector<int> generateVectorFromArgs(int argc, char **argv)
@@ -77,10 +67,15 @@ std::vector<int> generateVectorFromArgs(int argc, char **argv)
 int main_tp2(int argc, char **argv)
 {
   std::vector<int> dst, src = generateVectorFromArgs(argc, argv);
+  if (src.size() < 1)
+  {
+    std::cerr << "No elements to sort" << std::endl;
+    return 1;
+  }
 
   std::cout << "Execute the CPU version" << std::endl;
   sortCPU_prepare(src, dst);
-  printResults(dst);
+  PrintResults<std::vector<int>>(dst, "output_CPU.txt");
 
   int deviceCount = 0;
   cudaGetDeviceCount(&deviceCount);
@@ -88,7 +83,7 @@ int main_tp2(int argc, char **argv)
   {
     std::cout << "Execute the GPU version" << std::endl;
     sortGPU_prepare(src, dst);
-    printResults(dst);
+    PrintResults<std::vector<int>>(dst, "ouput_GPU.txt");
   }
 
   return 0;

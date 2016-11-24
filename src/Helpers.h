@@ -1,6 +1,8 @@
 #ifndef HELPERS_HEADER
 #define HELPERS_HEADER
 
+#include <iostream>
+#include <fstream>
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
@@ -23,7 +25,16 @@ public:
   __host__ static unsigned int GetBlockSize() { return CUDA_BLOCK_SIZE; }
 };
 
-static void HandleError(cudaError_t err, const char *file, int line) {
+template <typename T>
+__host__ void PrintResults(const T& results, const std::string& filename)
+{
+  std::ofstream ouput(filename);
+  for (typename T::const_iterator it = results.begin(); it != results.end(); ++it)
+    ouput << *it << " ";
+  ouput << std::endl;
+}
+
+static __host__ void HandleError(cudaError_t err, const char *file, int line) {
   if (err != cudaSuccess) {
     printf("%s in %s at line %d\n", cudaGetErrorString(err), file, line);
     exit(EXIT_FAILURE);
