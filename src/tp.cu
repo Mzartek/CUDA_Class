@@ -33,7 +33,7 @@ __host__ void syracuseCPU_prepare(size_t size)
 
   syracuseCPU_execute(&dst[0], size);
 
-  PrintResults<std::vector<unsigned int>>(dst, "output_CPU.txt");
+  PrintResults<std::vector<unsigned int> >(dst, "output_CPU.txt");
 }
 
 __host__ void syracuseGPU_prepare(size_t size)
@@ -54,7 +54,7 @@ __host__ void syracuseGPU_prepare(size_t size)
   HANDLE_ERROR(cudaMemcpy(&dstCPU[0], dstGPU, byteSize, cudaMemcpyDeviceToHost));
   HANDLE_ERROR(cudaFree(dstGPU));
 
-  PrintResults<std::vector<unsigned int>>(dstCPU, "output_GPU.txt");
+  PrintResults<std::vector<unsigned int> >(dstCPU, "output_GPU.txt");
 }
 
 int main_tp(int argc, char **argv)

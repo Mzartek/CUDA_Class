@@ -28,7 +28,7 @@ public:
 template <typename T>
 __host__ void PrintResults(const T& results, const std::string& filename)
 {
-  std::ofstream ouput(filename);
+  std::ofstream ouput(filename.c_str());
   for (typename T::const_iterator it = results.begin(); it != results.end(); ++it)
     ouput << *it << " ";
   ouput << std::endl;

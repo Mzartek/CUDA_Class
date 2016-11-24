@@ -88,7 +88,7 @@ int main_tp2(int argc, char **argv)
     cudaEventElapsedTime(&elapsedTime, start, stop);
   }
   std::cout << "Elapsed time:" << elapsedTime << std::endl;
-  PrintResults<std::vector<int>>(dst, "output_CPU.txt");
+  PrintResults<std::vector<int> >(dst, "output_CPU.txt");
 
   int deviceCount = 0;
   cudaGetDeviceCount(&deviceCount);
@@ -104,7 +104,7 @@ int main_tp2(int argc, char **argv)
       cudaEventElapsedTime(&elapsedTime, start, stop);
     }
     std::cout << "Elapsed time:" << elapsedTime << std::endl;
-    PrintResults<std::vector<int>>(dst, "ouput_GPU.txt");
+    PrintResults<std::vector<int> >(dst, "output_GPU.txt");
   }
 
   cudaEventDestroy(start);
