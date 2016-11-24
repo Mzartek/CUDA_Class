@@ -73,8 +73,21 @@ int main_tp2(int argc, char **argv)
     return 1;
   }
 
+  cudaEvent_t start, stop;
+  float elapsedTime;
+  cudaEventCreate(&start);
+  cudaEventCreate(&stop);
+
   std::cout << "Execute the CPU version" << std::endl;
-  sortCPU_prepare(src, dst);
+  {
+    cudaEventRecord(start);
+    sortCPU_prepare(src, dst);
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+    elapsedTime = 0;
+    cudaEventElapsedTime(&elapsedTime, start, stop);
+  }
+  std::cout << "Elapsed time:" << elapsedTime << std::endl;
   PrintResults<std::vector<int>>(dst, "output_CPU.txt");
 
   int deviceCount = 0;
@@ -82,9 +95,20 @@ int main_tp2(int argc, char **argv)
   if (deviceCount > 0)
   {
     std::cout << "Execute the GPU version" << std::endl;
-    sortGPU_prepare(src, dst);
+    {
+      cudaEventRecord(start);
+      sortGPU_prepare(src, dst);
+      cudaEventRecord(stop);
+      cudaEventSynchronize(stop);
+      elapsedTime = 0;
+      cudaEventElapsedTime(&elapsedTime, start, stop);
+    }
+    std::cout << "Elapsed time:" << elapsedTime << std::endl;
     PrintResults<std::vector<int>>(dst, "ouput_GPU.txt");
   }
+
+  cudaEventDestroy(start);
+  cudaEventDestroy(stop);
 
   return 0;
 }
