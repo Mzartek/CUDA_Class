@@ -4,5 +4,5 @@
 
 int main(int argc, char **argv)
 {
-  return main_tp2(argc, argv);
+  return main_project(argc, argv);
 }
