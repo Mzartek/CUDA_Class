@@ -3,12 +3,19 @@
 
 #include "Helpers.h"
 
-template <typename T>
 struct Vec3
 {
-  T x, y, z;
+  float x, y, z;
 
-  __host__ __device__ Vec3<T>& operator=(const Vec3<T>& other)
+  __host__ __device__ void Normalize()
+  {
+    float length = sqrtf((x * x) + (y * y) + (z * z));
+    x /= length;
+    y /= length;
+    z /= length;
+  }
+
+  __host__ __device__ Vec3& operator=(const Vec3& other)
   {
     this->x = other.x;
     this->y = other.y;
@@ -16,7 +23,15 @@ struct Vec3
     return *this;
   }
 
-  __host__ __device__ Vec3<T>& operator+=(const Vec3<T>& other)
+  __host__ __device__ Vec3& operator=(float value)
+  {
+    this->x = value;
+    this->y = value;
+    this->z = value;
+    return *this;
+  }
+
+  __host__ __device__ Vec3& operator+=(const Vec3& other)
   {
     this->x += other.x;
     this->y += other.y;
@@ -24,7 +39,15 @@ struct Vec3
     return *this;
   }
 
-  __host__ __device__ Vec3<T>& operator-=(const Vec3<T>& other)
+  __host__ __device__ Vec3& operator+=(float value)
+  {
+    this->x += value;
+    this->y += value;
+    this->z += value;
+    return *this;
+  }
+
+  __host__ __device__ Vec3& operator-=(const Vec3& other)
   {
     this->x -= other.x;
     this->y -= other.y;
@@ -32,17 +55,93 @@ struct Vec3
     return *this;
   }
 
-  __host__ __device__ Vec3<T> operator+(Vec3<T> lhs, const Vec3<T>& rhs)
+  __host__ __device__ Vec3& operator-=(float value)
   {
-    lhs += rhs;
-    return lhs;
+    this->x -= value;
+    this->y -= value;
+    this->z -= value;
+    return *this;
   }
 
-  __host__ __device__ Vec3<T> operator-(Vec3<T> lhs, const Vec3<T>& rhs)
+  __host__ __device__ Vec3& operator*=(const Vec3& other)
   {
-    lhs -= rhs;
-    return rhs;
+    this->x *= other.x;
+    this->y *= other.y;
+    this->z *= other.z;
+    return *this;
+  }
+
+  __host__ __device__ Vec3& operator*=(float value)
+  {
+    this->x *= value;
+    this->y *= value;
+    this->z *= value;
+    return *this;
+  }
+
+  __host__ __device__ Vec3& operator/=(const Vec3& other)
+  {
+    this->x /= other.x;
+    this->y /= other.y;
+    this->z /= other.z;
+    return *this;
+  }
+
+  __host__ __device__ Vec3& operator/=(float value)
+  {
+    this->x /= value;
+    this->y /= value;
+    this->z /= value;
+    return *this;
   }
 };
+
+__host__ __device__ Vec3 operator+(Vec3 lhs, const Vec3& rhs)
+{
+  lhs += rhs;
+  return lhs;
+}
+
+__host__ __device__ Vec3 operator+(Vec3 lhs, float value)
+{
+  lhs += value;
+  return lhs;
+}
+
+__host__ __device__ Vec3 operator-(Vec3 lhs, const Vec3& rhs)
+{
+  lhs -= rhs;
+  return rhs;
+}
+
+__host__ __device__ Vec3 operator-(Vec3 lhs, float value)
+{
+  lhs -= value;
+  return lhs;
+}
+
+__host__ __device__ Vec3 operator*(Vec3 lhs, const Vec3& rhs)
+{
+  lhs *= rhs;
+  return rhs;
+}
+
+__host__ __device__ Vec3 operator*(Vec3 lhs, float value)
+{
+  lhs *= value;
+  return lhs;
+}
+
+__host__ __device__ Vec3 operator/(Vec3 lhs, const Vec3& rhs)
+{
+  lhs /= rhs;
+  return rhs;
+}
+
+__host__ __device__ Vec3 operator/(Vec3 lhs, float value)
+{
+  lhs /= value;
+  return lhs;
+}
 
 #endif

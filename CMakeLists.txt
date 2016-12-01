@@ -22,6 +22,8 @@ set(sources
     ${src_dir}/tp.h
     ${src_dir}/tp.cu
     ${src_dir}/tp2.h
-    ${src_dir}/tp2.cu)
+    ${src_dir}/tp2.cu
+	${src_dir}/project.h
+	${src_dir}/project.cu)
 
 cuda_add_executable(CUDA_Class ${sources})

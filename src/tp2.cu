@@ -70,6 +70,7 @@ int main_tp2(int argc, char **argv)
   if (src.size() < 1)
   {
     std::cerr << "No elements to sort" << std::endl;
+    std::cerr << "./CUDA_Class [1 2 3 ... N]" << std::endl;
     return 1;
   }
 
