@@ -77,6 +77,8 @@ __host__ void rainParticlesMoveGPU_prepare(size_t size, size_t iterSize)
     rainParticlesMoveGPU_execute<<<gridSize, blockSize>>>(particlesGPU, particlesCPU.size());
   }
   HANDLE_ERROR(cudaMemcpy(&particlesCPU[0], particlesGPU, byteSize, cudaMemcpyDeviceToHost));
+  HANDLE_ERROR(cudaFree(particlesGPU));
+
   PrintResults(particlesCPU, "particles_GPU.txt", true);
 }
 
@@ -87,13 +89,11 @@ int main_project(int argc, char **argv)
 
   // CPU
   {
-    clock_t time;
-
     std::cout << "Start CPU" << std::endl;
-    time = clock();
+    clock_t t = clock();
     rainParticlesMoveCPU_prepare(sizeParticles, sizeIterations);
-    time = clock() - time;
-    std::cout << "Done: (" << time << "ms)" << std::endl;
+    t = clock() - t;
+    std::cout << "Done: (" << t << "ms)" << std::endl;
   }
   std::cout << std::endl;
   // GPU
@@ -110,6 +110,9 @@ int main_project(int argc, char **argv)
     cudaEventSynchronize(stop);
     cudaEventElapsedTime(&elapsedTime, start, stop);
     std::cout << "Done: (" << elapsedTime << "ms)" << std::endl;
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
   }
 
   return 0;
