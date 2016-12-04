@@ -23,6 +23,7 @@ __host__ std::vector<Particle> createRainParticles(size_t size)
 __host__ __device__ void rainParticleMove(Particle &particle)
 {
   particle.Move();
+  particle.AddForce({ 1.0f, 0.0f, 0.0f }, 50.0f);
 }
 
 __host__ void rainParticlesMoveCPU_execute(Particle *src, size_t size)

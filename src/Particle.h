@@ -41,6 +41,11 @@ public:
     _position += _direction * _speedDirection;
   }
 
+  __host__ __device__ void AddForce(const Vec3& force, float quantity)
+  {
+    _position += force * quantity;
+  }
+
   friend std::ostream& operator<<(std::ostream& out, const Particle& particle)
   {
     out << "(" << particle._position.x << ", " << particle._position.y << ", " << particle._position.z << ")";
