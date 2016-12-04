@@ -12,7 +12,7 @@ struct Vec3
 
   __host__ __device__ void Normalize()
   {
-    float length = sqrtf((x * x) + (y * y) + (z * z));
+    float length = sqrtf(x * x + y * y + z * z);
     x /= length;
     y /= length;
     z /= length;

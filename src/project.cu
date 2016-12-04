@@ -8,13 +8,12 @@ __host__ std::vector<Particle> createRainParticles(size_t size)
   std::vector<Particle> particles;
   for (size_t i = 0; i < size; ++i)
   {
-    Vec3 direction = { 0, -1, 0 };
-    Vec3 initPosition =
-    {
+    Vec3 direction(0, -1, 0);
+    Vec3 initPosition(
       static_cast<float>(rand() % 200 - 100),
       100.0f,
       static_cast<float>(rand() % 200 - 100)
-    };
+    );
     particles.push_back(Particle(static_cast<float>(rand() % 100), 100.0f, 5.0f, initPosition, direction, 5.0f));
   }
   return particles;
