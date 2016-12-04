@@ -6,7 +6,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
-#include <curand.h>
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
 
@@ -27,12 +26,13 @@ public:
 };
 
 template <typename T>
-__host__ void PrintResults(const T& results, const std::string& filename)
+__host__ void PrintResults(const T& results, const std::string& filename, bool append = false)
 {
-  std::ofstream ouput(filename.c_str());
+  std::ofstream output(filename.c_str(), append ? std::fstream::out | std::fstream::app : std::fstream::out);
+  output << "[";
   for (typename T::const_iterator it = results.begin(); it != results.end(); ++it)
-    ouput << *it << " ";
-  ouput << std::endl;
+    output << *it << " ";
+  output << "]" << std::endl;
 }
 
 static __host__ void HandleError(cudaError_t err, const char *file, int line) {

@@ -96,49 +96,49 @@ struct Vec3
   }
 };
 
-__host__ __device__ Vec3 operator+(Vec3 lhs, const Vec3& rhs)
+__host__ __device__ inline Vec3 operator+(Vec3 lhs, const Vec3& rhs)
 {
   lhs += rhs;
   return lhs;
 }
 
-__host__ __device__ Vec3 operator+(Vec3 lhs, float value)
+__host__ __device__ inline Vec3 operator+(Vec3 lhs, float value)
 {
   lhs += value;
   return lhs;
 }
 
-__host__ __device__ Vec3 operator-(Vec3 lhs, const Vec3& rhs)
+__host__ __device__ inline Vec3 operator-(Vec3 lhs, const Vec3& rhs)
 {
   lhs -= rhs;
   return rhs;
 }
 
-__host__ __device__ Vec3 operator-(Vec3 lhs, float value)
+__host__ __device__ inline Vec3 operator-(Vec3 lhs, float value)
 {
   lhs -= value;
   return lhs;
 }
 
-__host__ __device__ Vec3 operator*(Vec3 lhs, const Vec3& rhs)
+__host__ __device__ inline Vec3 operator*(Vec3 lhs, const Vec3& rhs)
 {
   lhs *= rhs;
   return rhs;
 }
 
-__host__ __device__ Vec3 operator*(Vec3 lhs, float value)
+__host__ __device__ inline Vec3 operator*(Vec3 lhs, float value)
 {
   lhs *= value;
   return lhs;
 }
 
-__host__ __device__ Vec3 operator/(Vec3 lhs, const Vec3& rhs)
+__host__ __device__ inline Vec3 operator/(Vec3 lhs, const Vec3& rhs)
 {
   lhs /= rhs;
   return rhs;
 }
 
-__host__ __device__ Vec3 operator/(Vec3 lhs, float value)
+__host__ __device__ inline Vec3 operator/(Vec3 lhs, float value)
 {
   lhs /= value;
   return lhs;

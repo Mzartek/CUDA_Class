@@ -20,20 +20,12 @@ class Particle
 
 public:
 
-  __host__ Particle() {}
-
-  // Need to be called in first
-  __host__ __device__ void Initialize(float life, float initialLife, float lifeSpeed, const Vec3& initialPosition, const Vec3& direction, float speedDirection)
+  __host__ Particle(float life, float initialLife, float lifeSpeed, const Vec3& initialPosition, const Vec3& direction, float speedDirection) :
+    _life(life), _initialLife(initialLife), _lifeSpeed(lifeSpeed),
+    _initialPosition(initialPosition), _direction(direction), _speedDirection(speedDirection)
   {
-    _life = life;
-    _initialLife = initialLife;
-    _lifeSpeed = lifeSpeed;
-    _initialPosition = initialPosition;
-    _direction = direction;
-    _speedDirection = speedDirection;
-
     const float diff = (_initialLife - _life) / _lifeSpeed;
-    _position = _initialPosition + ((_direction * _speedDirection) * diff);
+    _position = _initialPosition + _direction * _speedDirection * diff;
   }
 
   __host__ __device__ void Rebirth()
@@ -47,6 +39,12 @@ public:
     if (_life <= 0.0f) Rebirth();
     _life -= _lifeSpeed;
     _position += _direction * _speedDirection;
+  }
+
+  friend std::ostream& operator<<(std::ostream& out, const Particle& particle)
+  {
+    out << "(" << particle._position.x << ", " << particle._position.y << ", " << particle._position.z << ")";
+    return out;
   }
 };
 

@@ -19,10 +19,10 @@ set(sources
     ${src_dir}/Particle.h
     ${src_dir}/Vec.h
     ${src_dir}/main.cu
-    ${src_dir}/tp.h
-    ${src_dir}/tp.cu
-    ${src_dir}/tp2.h
-    ${src_dir}/tp2.cu
+#    ${src_dir}/tp.h
+#    ${src_dir}/tp.cu
+#    ${src_dir}/tp2.h
+#    ${src_dir}/tp2.cu
 	${src_dir}/project.h
 	${src_dir}/project.cu)
 
