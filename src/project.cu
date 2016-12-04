@@ -20,24 +20,24 @@ __host__ std::vector<Particle> createRainParticles(size_t size)
   return particles;
 }
 
-__host__ __device__ void rainParticleMove(Particle &particle)
+__host__ __device__ void rainParticleMove(Particle &particle, const Vec3 wind)
 {
   particle.Move();
-  particle.AddForce({ 1.0f, 0.0f, 0.0f }, 50.0f);
+  particle.AddForce(wind, 50.0f);
 }
 
-__host__ void rainParticlesMoveCPU_execute(Particle *src, size_t size)
+__host__ void rainParticlesMoveCPU_execute(Particle *src, size_t size, const Vec3 wind)
 {
   for (size_t i = 0; i < size; ++i)
   {
-    rainParticleMove(src[i]);
+    rainParticleMove(src[i], wind);
   }
 }
 
-__global__ void rainParticlesMoveGPU_execute(Particle *src, size_t size)
+__global__ void rainParticlesMoveGPU_execute(Particle *src, size_t size, const Vec3 wind)
 {
   int index = blockIdx.x * blockDim.x + threadIdx.x;
-  if (index < size) rainParticleMove(src[index]);
+  if (index < size) rainParticleMove(src[index], wind);
 }
 
 __host__ void rainParticlesMoveCPU_prepare(size_t size, size_t iterSize)
@@ -48,7 +48,7 @@ __host__ void rainParticlesMoveCPU_prepare(size_t size, size_t iterSize)
   PrintResults(particles, "particles_CPU.txt");
   for (size_t i = 0; i < iterSize; ++i)
   {
-    rainParticlesMoveCPU_execute(&particles[0], particles.size());
+    rainParticlesMoveCPU_execute(&particles[0], particles.size(), Vec3(1.0f, 0.0f, 0.0f));
   }
   PrintResults(particles, "particles_CPU.txt", true);
 }
@@ -75,7 +75,7 @@ __host__ void rainParticlesMoveGPU_prepare(size_t size, size_t iterSize)
   PrintResults(particlesCPU, "particles_GPU.txt");
   for (size_t i = 0; i < iterSize; ++i)
   {
-    rainParticlesMoveGPU_execute<<<gridSize, blockSize>>>(particlesGPU, particlesCPU.size());
+    rainParticlesMoveGPU_execute<<<gridSize, blockSize>>>(particlesGPU, particlesCPU.size(), Vec3(1.0f, 0.0f, 0.0f));
   }
   HANDLE_ERROR(cudaMemcpy(&particlesCPU[0], particlesGPU, byteSize, cudaMemcpyDeviceToHost));
   HANDLE_ERROR(cudaFree(particlesGPU));
