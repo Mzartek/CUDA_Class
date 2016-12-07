@@ -19,7 +19,25 @@ __host__ std::vector<Particle> createRainParticles(size_t size)
   return particles;
 }
 
-__host__ __device__ void rainParticleMove(Particle &particle, const Vec3 wind)
+
+__host__ std::vector<Particle> createSmokeParticles(size_t size)
+{
+	std::std::vector<Particle> particles;
+	for (size_t i = 0; i < size; ++i)
+  	{
+    	Vec3 direction(static_cast<float>(rand()%2 - 1), 1, static_cast<float>(rand()%2 - 1);
+    	Vec3 initPosition(
+      		static_cast<float>(rand() % 20 - 10),
+      		0.0f,
+      		static_cast<float>(rand() % 20 - 10)
+    );
+    particles.push_back(Particle(static_cast<float>(rand() % 100), 100.0f, 5.0f, initPosition, direction, 5.0f));
+  }
+  return particles;
+}
+
+
+__host__ __device__ void particleMove(Particle &particle, const Vec3 wind)
 {
   particle.Move();
   particle.AddForce(wind, 50.0f);
@@ -29,14 +47,14 @@ __host__ void rainParticlesMoveCPU_execute(Particle *src, size_t size, const Vec
 {
   for (size_t i = 0; i < size; ++i)
   {
-    rainParticleMove(src[i], wind);
+    particleMove(src[i], wind);
   }
 }
 
 __global__ void rainParticlesMoveGPU_execute(Particle *src, size_t size, const Vec3 wind)
 {
   int index = blockIdx.x * blockDim.x + threadIdx.x;
-  if (index < size) rainParticleMove(src[index], wind);
+  if (index < size) particleMove(src[index], wind);
 }
 
 __host__ void rainParticlesMoveCPU_prepare(size_t size, size_t iterSize)
@@ -80,6 +98,42 @@ __host__ void rainParticlesMoveGPU_prepare(size_t size, size_t iterSize)
   HANDLE_ERROR(cudaFree(particlesGPU));
 
   PrintResults(particlesCPU, "particles_GPU.txt", true);
+}
+
+__global__ void smokeParticlesMoveGPU_execute(Particle *src, size_t size, const Vec3 wind)
+{
+  int index = blockIdx.x * blockDim.x + threadIdx.x;
+  if (index < size) particleMove(src[index], wind);
+}
+
+__host__ void smokeParticlesMoveGPU_prepare(size_t size, size_t iterSize)
+{
+  std::vector<Particle> particlesCPU = createSmokeParticles(size);
+  Particle *particlesGPU = NULL;
+
+  PrintResults(particlesCPU, "particles_smoke_GPU.txt");
+
+  size_t byteSize = particlesCPU.size() * sizeof(Particle);
+
+  HANDLE_ERROR(cudaMalloc(&particlesGPU, byteSize));
+  HANDLE_ERROR(cudaMemcpy(particlesGPU, &particlesCPU[0], byteSize, cudaMemcpyHostToDevice));
+
+  CUDAConfig cudaConfig(size);
+  unsigned int gridSize = cudaConfig.GetGridSize();
+  unsigned int blockSize = cudaConfig.GetBlockSize();
+  std::cout << "Grid Size: " << gridSize << std::endl;
+  std::cout << "Block Size: " << blockSize << std::endl;
+
+  std::cout << "Start moving" << std::endl;
+  PrintResults(particlesCPU, "particles_smoke_GPU.txt");
+  for (size_t i = 0; i < iterSize; ++i)
+  {
+    smokeParticlesMoveGPU_execute<<<gridSize, blockSize>>>(particlesGPU, particlesCPU.size(), Vec3(1.0f, 0.0f, 0.0f));
+  }
+  HANDLE_ERROR(cudaMemcpy(&particlesCPU[0], particlesGPU, byteSize, cudaMemcpyDeviceToHost));
+  HANDLE_ERROR(cudaFree(particlesGPU));
+
+  PrintResults(particlesCPU, "particles_smoke_GPU.txt", true);
 }
 
 int main_project(int argc, char **argv)
