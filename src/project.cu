@@ -22,10 +22,10 @@ __host__ std::vector<Particle> createRainParticles(size_t size)
 
 __host__ std::vector<Particle> createSmokeParticles(size_t size)
 {
-	std::std::vector<Particle> particles;
+	std::vector<Particle> particles;
 	for (size_t i = 0; i < size; ++i)
   	{
-    	Vec3 direction(static_cast<float>(rand()%2 - 1), 1, static_cast<float>(rand()%2 - 1);
+    	Vec3 direction(static_cast<float>(rand()%2 - 1), 1, static_cast<float>(rand()%2 - 1));
     	Vec3 initPosition(
       		static_cast<float>(rand() % 20 - 10),
       		0.0f,
